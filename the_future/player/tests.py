@@ -36,7 +36,6 @@ class LegArmourTests(TestCase):
         resp = self.client.get('{}{}/'.format(self.url, self.leg_armour.id))
 
         self.assertEqual(resp.status_code, 200)
-
         resp_data = json.loads(resp.content.decode('utf8'))
 
         self._test_fields(resp_data)
