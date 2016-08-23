@@ -1,7 +1,8 @@
 from django.contrib import admin
 
 from .models import (
-    ArmArmour, BackPack, BodyArmour, Faction, Player, LegArmour)
+    ArmArmour, BackPack, BodyArmour, Faction, Head, Player, LegArmour
+)
 
 
 @admin.register(ArmArmour)
@@ -31,4 +32,8 @@ class PlayerAdmin(admin.ModelAdmin):
 
 @admin.register(Faction)
 class FactionAdmin(admin.ModelAdmin):
+    pass
+
+@admin.register(Head)
+class HeadAdmin(admin.ModelAdmin):
     pass
