@@ -1,23 +1,26 @@
 from django.db import models
-from django.utils import timezone
+from django.conf import settings
+
+from utils.generic_models import CommonFields
 
 
-class Player(models.Model):
+class Player(CommonFields):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL)
     title = models.CharField(max_length=255, blank=True, null=True)
     first_name = models.CharField(max_length=255)
     last_name = models.CharField(max_length=255)
     faction = models.ForeignKey('Faction')
 
     # attributes
-    coordination = models.DecimalField(max_digits=2, decimal_places=0)
-    luck = models.DecimalField(max_digits=2, decimal_places=0)
-    awareness = models.DecimalField(max_digits=2, decimal_places=0)
-    strength = models.DecimalField(max_digits=2, decimal_places=0)
-    speed = models.DecimalField(max_digits=2, decimal_places=0)
-    intelligent = models.DecimalField(max_digits=2, decimal_places=0)
-    charisma = models.DecimalField(max_digits=2, decimal_places=0)
-    health = models.DecimalField(max_digits=2, decimal_places=0)
-    lives = models.DecimalField(max_digits=2, decimal_places=0)
+    melee = models.DecimalField(max_digits=1, decimal_places=0)
+    ballistic = models.DecimalField(max_digits=1, decimal_places=0)
+    strength = models.DecimalField(max_digits=1, decimal_places=0)
+    toughness = models.DecimalField(max_digits=1, decimal_places=0)
+    wounds = models.DecimalField(max_digits=1, decimal_places=0)
+    initiative = models.DecimalField(max_digits=1, decimal_places=0)
+    attacks = models.DecimalField(max_digits=1, decimal_places=0)
+    leadership = models.DecimalField(max_digits=1, decimal_places=0)
+    health = models.DecimalField(max_digits=1, decimal_places=0)
 
     # armour
     head = models.ForeignKey('Head')
@@ -28,15 +31,12 @@ class Player(models.Model):
     body = models.ForeignKey('BodyArmour')
     backpack = models.ForeignKey('Backpack')
 
-    created = models.DateTimeField(default=timezone.now)
-    is_active = models.BooleanField(default=True)
-
     def __str__(self):
         return '({}) {} {} {}'.format(
             self.faction.name, self.title, self.first_name, self.last_name)
 
 
-class Faction(models.Model):
+class Faction(CommonFields):
     name = models.CharField(max_length=255, blank=True)
     description = models.TextField()
 
@@ -44,7 +44,7 @@ class Faction(models.Model):
         return self.name
 
 
-class Armour(models.Model):
+class Armour(CommonFields):
     name = models.CharField(max_length=255)
     description = models.TextField()
     item = models.ManyToManyField('Item')
@@ -83,10 +83,10 @@ class BackPack(Armour):
 
 
 # Will move to battle items app
-class BattleItem(models.Model):
+class BattleItem(CommonFields):
     pass
 
 
 # Will move to items app
-class Item(models.Model):
+class Item(CommonFields):
     pass

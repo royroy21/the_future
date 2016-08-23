@@ -16,7 +16,27 @@ Including another URLconf
 from django.conf.urls import patterns, url, include
 from django.contrib import admin
 
+from player.api import (
+    ArmArmourResource,
+    BackPackResource,
+    BodyArmourResource,
+    FactionResource,
+    HeadResource,
+    LegArmourResource,
+    PlayerResource,
+)
+
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
 ]
+
+urlpatterns += patterns('',
+    url(r'api/arm-armour/', include(ArmArmourResource.urls())),
+    url(r'api/back-pack/', include(BackPackResource.urls())),
+    url(r'api/body-armour/', include(BodyArmourResource.urls())),
+    url(r'api/faction/', include(FactionResource.urls())),
+    url(r'api/head/', include(HeadResource.urls())),
+    url(r'api/leg-armour/', include(LegArmourResource.urls())),
+    url(r'api/player/', include(PlayerResource.urls())),
+)
