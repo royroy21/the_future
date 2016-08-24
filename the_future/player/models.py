@@ -5,7 +5,7 @@ from utils.generic_models import CommonFields
 
 
 class Player(CommonFields):
-    user = models.ForeignKey(Account)
+    account = models.ForeignKey(Account)
     title = models.CharField(max_length=255, blank=True, null=True)
     first_name = models.CharField(max_length=255)
     last_name = models.CharField(max_length=255)
