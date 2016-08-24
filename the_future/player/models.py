@@ -1,11 +1,11 @@
 from django.db import models
-from django.conf import settings
 
+from account.models import Account
 from utils.generic_models import CommonFields
 
 
 class Player(CommonFields):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL)
+    user = models.ForeignKey(Account)
     title = models.CharField(max_length=255, blank=True, null=True)
     first_name = models.CharField(max_length=255)
     last_name = models.CharField(max_length=255)
