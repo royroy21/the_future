@@ -10,11 +10,8 @@ class DetailURLMixin(object):
         )
 
     @classmethod
-    def _get_reverse_url_helper(cls):
-        return ''.join('-' + i.lower() if i.isupper()
-                       else i for i in cls.__name__).strip('-')
-
-    @classmethod
     def get_url_string(cls):
-        t = 'api/{}/'
-        return t.format(cls._get_reverse_url_helper())
+        api_slug = ''.join('-' + i.lower() if i.isupper()
+                           else i for i in cls.__name__).strip('-')
+
+        return 'api/{}/'.format(api_slug)
