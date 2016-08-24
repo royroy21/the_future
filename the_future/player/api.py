@@ -29,7 +29,7 @@ class PlayerResource(GenericCrudResource):
     model_cls = Player
 
     preparer = FieldsPreparer(fields={
-        'user': 'user.username',
+        'account': 'account.detail_url',
         'title': 'title',
         'first_name': 'first_name',
         'last_name': 'last_name',

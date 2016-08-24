@@ -2,8 +2,8 @@ from restless.dj import DjangoResource
 
 
 COMMON_PREPARE_FIELDS = {
-    'created_by': 'created_by.username',
-    'modified_by': 'modified_by.username',
+    'created_by': 'created_by.detail_url',
+    'modified_by': 'modified_by.detail_url',
     'created': 'created',
     'is_active': 'is_active'
 }

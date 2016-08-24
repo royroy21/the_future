@@ -16,6 +16,7 @@ Including another URLconf
 from django.conf.urls import patterns, url, include
 from django.contrib import admin
 
+from account.api import AccountResource
 from player.api import (
     ArmArmourResource,
     BackPackResource,
@@ -32,11 +33,28 @@ urlpatterns = [
 ]
 
 urlpatterns += patterns('',
-    url(r'api/arm-armour/', include(ArmArmourResource.urls())),
-    url(r'api/back-pack/', include(BackPackResource.urls())),
-    url(r'api/body-armour/', include(BodyArmourResource.urls())),
-    url(r'api/faction/', include(FactionResource.urls())),
-    url(r'api/head/', include(HeadResource.urls())),
-    url(r'api/leg-armour/', include(LegArmourResource.urls())),
-    url(r'api/player/', include(PlayerResource.urls())),
+    url(r'{}'.format(AccountResource.model_cls.get_url_string()),
+        include(AccountResource.urls()),
+    ),
+    url(r'{}'.format(ArmArmourResource.model_cls.get_url_string()),
+        include(ArmArmourResource.urls()),
+    ),
+    url(r'{}'.format(BackPackResource.model_cls.get_url_string()),
+        include(BackPackResource.urls()),
+    ),
+    url(r'{}'.format(BodyArmourResource.model_cls.get_url_string()),
+        include(BodyArmourResource.urls()),
+    ),
+    url(r'{}'.format(FactionResource.model_cls.get_url_string()),
+        include(FactionResource.urls()),
+    ),
+    url(r'{}'.format(HeadResource.model_cls.get_url_string()),
+        include(HeadResource.urls()),
+    ),
+    url(r'{}'.format(LegArmourResource.model_cls.get_url_string()),
+        include(LegArmourResource.urls()),
+    ),
+    url(r'{}'.format(PlayerResource.model_cls.get_url_string()),
+        include(PlayerResource.urls()),
+    ),
 )

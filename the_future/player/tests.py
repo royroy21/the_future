@@ -1,8 +1,9 @@
 import json
 
-from django.contrib.auth import get_user_model
+from django.contrib.auth.models import User
 from django.test import TestCase
 
+from account.models import Account
 from player.models import LegArmour
 
 
@@ -11,12 +12,13 @@ class LegArmourTests(TestCase):
     url = '/api/leg-armour/'
 
     def setUp(self):
-        user = get_user_model().objects.create(
+        user = User.objects.create(
             username='cat', password='password')
+        self.account = Account.objects.create(user=user)
 
         self.leg_armour = LegArmour.objects.create(
-            created_by=user,
-            modified_by=user,
+            created_by=self.account,
+            modified_by=self.account,
             name='test name',
             description='test description',
             amount_of_items=2,
@@ -31,6 +33,8 @@ class LegArmourTests(TestCase):
                           str(self.leg_armour.amount_of_items))
         self.assertEquals(data['health'], str(self.leg_armour.health))
         self.assertEquals(data['value'], str(self.leg_armour.value))
+        self.assertEquals(data['created_by'], self.account.detail_url)
+        self.assertEquals(data['modified_by'], self.account.detail_url)
 
     def test_detail(self):
         resp = self.client.get('{}{}/'.format(self.url, self.leg_armour.id))
