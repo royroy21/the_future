@@ -5,7 +5,7 @@ from restless.preparers import FieldsPreparer
 from utils.generic_resources import (
     COMMON_PREPARE_FIELDS, GenericCrudResource, GenericReadOnlyResource
 )
-from .forms import PlayerFrom
+from .forms import PlayerForm
 from .models import (
     ArmArmour, BackPack, BodyArmour, Faction, Head, Player, LegArmour
 )
@@ -28,14 +28,14 @@ GENERIC_ARMOUR_FIELDS_PlUS_WEAPON.update(
 class PlayerResource(GenericCrudResource):
 
     model_cls = Player
-    form_cls = PlayerFrom
+    form_cls = PlayerForm
 
     preparer = FieldsPreparer(fields={
         'account_url': 'account.detail_url',
         'title': 'title',
         'first_name': 'first_name',
         'last_name': 'last_name',
-        'faction_url': 'faction_url',
+        'faction_url': 'faction.detail_url',
         'melee': 'melee',
         'ballistic': 'ballistic',
         'strength': 'strength',
@@ -44,15 +44,15 @@ class PlayerResource(GenericCrudResource):
         'initiative': 'initiative',
         'attacks': 'attacks',
         'leadership': 'leadership',
-        'health': 'health',
-        'head_url': 'head.detail_url',
-        'left_arm_url': 'left_arm.detail_url',
-        'left_leg_url': 'left_leg.detail_url',
-        'right_arm_url': 'right_arm.detail_url',
-        'right_leg_url': 'right_leg.detail_url',
-        'body_url': 'body.detail_url',
-        'backpack_url': 'backpack.detail_url',
-    }.update(COMMON_PREPARE_FIELDS))
+        'health': 'health'})
+        # 'head_url': 'head.detail_url',
+        # 'left_arm_url': 'left_arm.detail_url',
+        # 'left_leg_url': 'left_leg.detail_url',
+        # 'right_arm_url': 'right_arm.detail_url',
+        # 'right_leg_url': 'right_leg.detail_url',
+        # 'body_url': 'body.detail_url',
+        # 'backpack_url': 'backpack.detail_url',
+    # }.update(COMMON_PREPARE_FIELDS))
 
 
 class FactionResource(GenericReadOnlyResource):

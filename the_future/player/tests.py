@@ -93,11 +93,9 @@ class PlayerTests(TestCase):
             self.url, data=json.dumps(data), content_type='application/json'
         )
 
-        import pdb; pdb.set_trace()
-
-        r_data = json.loads(resp.content)
+        r_data = json.loads(resp.content.decode('utf8'))
 
         self.assertEqual(resp.status_code, 201)
 
         for k, v in data.items():
-            self.assertEqual(r_data[k], v)
+            self.assertEqual(r_data[k], str(v))
