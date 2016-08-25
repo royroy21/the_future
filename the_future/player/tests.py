@@ -94,7 +94,6 @@ class PlayerTests(TestCase):
         )
 
         r_data = json.loads(resp.content.decode('utf8'))
-
         self.assertEqual(resp.status_code, 201)
 
         for k, v in data.items():
