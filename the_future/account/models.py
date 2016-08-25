@@ -11,3 +11,6 @@ class Account(models.Model, DetailURLMixin):
     @property
     def detail_url(self):
         return self.get_detail_url()
+
+    def __str__(self):
+        return self.user.username
