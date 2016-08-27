@@ -5,7 +5,10 @@ from restless.exceptions import BadRequest, NotFound
 COMMON_PREPARE_FIELDS = {
     'created_by': 'created_by.detail_url',
     'modified_by': 'modified_by.detail_url',
-    'created': 'created',
+
+    # TODO - isoformat causes 500
+    # 'created': 'created.isoformat',
+
     'is_active': 'is_active'
 }
 
@@ -13,6 +16,9 @@ COMMON_PREPARE_FIELDS = {
 class GenericReadOnlyResource(DjangoResource):
     model_cls = None
     form_cls = None
+
+    def is_authenticated(self):
+        return self.request.user.is_authenticated()
 
     def list(self):
         return self.model_cls.objects.filter(is_active=True)
@@ -23,10 +29,6 @@ class GenericReadOnlyResource(DjangoResource):
 
 class GenericCrudResource(GenericReadOnlyResource):
 
-    # TODO - Do not leave like this!
-    def is_authenticated(self):
-        return True
-
     def reference_object(self, pk):
         try:
             return self.model_cls.objects.get(uid=pk, is_active=True)
@@ -36,14 +38,14 @@ class GenericCrudResource(GenericReadOnlyResource):
     def create(self):
         form = self.form_cls(data=self.data)
         if form.is_valid():
-            return form.save()
+            return form.save(user=self.request.user)
         raise BadRequest(form.errors.as_json())
 
     def update(self, pk):
         obj = self.reference_object(pk)
         form = self.form_cls(data=self.data, instance=obj)
         if form.is_valid():
-            return form.save()
+            return form.save(user=self.request.user)
         raise BadRequest(form.errors.as_json())
 
     def delete(self, pk):

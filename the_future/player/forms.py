@@ -51,7 +51,7 @@ class PlayerForm(ModelForm):
         required=False
     )
 
-    def save(self, commit=True):
+    def save(self, commit=True, user=None):
         if self.cleaned_data['account_url'] is not None:
             self.instance.account = self.cleaned_data['account_url']
         if self.cleaned_data['head_url'] is not None:
@@ -71,6 +71,14 @@ class PlayerForm(ModelForm):
         if self.cleaned_data['faction_url'] is not None:
             self.instance.faction = self.cleaned_data['faction_url']
 
+        if user:
+            account = Account.objects.get(user=user)
+
+            if not self.instance.created_by:
+                self.instance.created_by = account
+
+            self.instance.modified_by = account
+
         return super(PlayerForm, self).save(commit)
 
     class Meta:
@@ -87,4 +95,6 @@ class PlayerForm(ModelForm):
             'faction',
             'created',
             'modified',
+            'created_by',
+            'modified_by',
         )

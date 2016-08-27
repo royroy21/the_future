@@ -16,6 +16,7 @@ Including another URLconf
 from django.conf.urls import patterns, url, include
 from django.contrib import admin
 
+
 from account.api import AccountResource
 from player.api import (
     ArmArmourResource,
@@ -30,6 +31,7 @@ from player.api import (
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
+    url(r'^api/jwt/', 'jwt_auth.views.obtain_jwt_token'),
 ]
 
 urlpatterns += patterns('',

@@ -13,8 +13,11 @@ class LegArmourTests(TestCase):
     url = '/api/leg-armour/'
 
     def setUp(self):
-        user = User.objects.create(
-            username='cat', password='password')
+        username = 'Cat'
+        password = 'CatNip1980'
+
+        user = User.objects.create_user(
+            username=username, password=password)
         self.account = Account.objects.create(user=user)
 
         self.leg_armour = LegArmour.objects.create(
@@ -27,6 +30,18 @@ class LegArmourTests(TestCase):
             value=100,
         )
 
+        data = {
+            'username': username,
+            'password': password,
+        }
+        resp = self.client.post(
+            '/api/jwt/',
+            json.dumps(data),
+            content_type='application/json',
+        )
+        self.assertEqual(resp.status_code, 200)
+        self.token = json.loads(resp.content.decode('utf8'))['token']
+
     def _test_fields(self, data):
         self.assertEquals(data['name'], self.leg_armour.name)
         self.assertEquals(data['description'], self.leg_armour.description)
@@ -38,7 +53,10 @@ class LegArmourTests(TestCase):
         self.assertEquals(data['modified_by'], self.account.detail_url)
 
     def test_detail(self):
-        resp = self.client.get('{}{}/'.format(self.url, self.leg_armour.id))
+        resp = self.client.get(
+            '{}{}/'.format(self.url, self.leg_armour.id),
+            HTTP_AUTHORIZATION='Bearer {}'.format(self.token)
+        )
 
         self.assertEqual(resp.status_code, 200)
         resp_data = json.loads(resp.content.decode('utf8'))
@@ -46,7 +64,9 @@ class LegArmourTests(TestCase):
         self._test_fields(resp_data)
 
     def test_list(self):
-        resp = self.client.get(self.url)
+        resp = self.client.get(
+            self.url, HTTP_AUTHORIZATION='Bearer {}'.format(self.token)
+        )
 
         self.assertEqual(resp.status_code, 200)
         resp_data = json.loads(resp.content.decode('utf8'))['objects'][0]
@@ -62,14 +82,29 @@ class PlayerTests(TestCase):
     url = '/api/player/'
 
     def setUp(self):
-        user = User.objects.create(
-            username='cat', password='password')
+        username = 'Cat'
+        password = 'CatNip1980'
+
+        user = User.objects.create_user(
+            username=username, password=password)
         self.account = Account.objects.create(user=user)
 
         self.faction = Faction.objects.create(
             created_by=self.account, modified_by=self.account,
             name='First Born', description='A generic faction'
         )
+
+        data = {
+            'username': username,
+            'password': password,
+        }
+        resp = self.client.post(
+            '/api/jwt/',
+            json.dumps(data),
+            content_type='application/json',
+        )
+        self.assertEqual(resp.status_code, 200)
+        self.token = json.loads(resp.content.decode('utf8'))['token']
 
     def test_create_player(self):
         data = {
@@ -90,7 +125,10 @@ class PlayerTests(TestCase):
         }
 
         resp = self.client.post(
-            self.url, data=json.dumps(data), content_type='application/json'
+            self.url,
+            data=json.dumps(data),
+            content_type='application/json',
+            HTTP_AUTHORIZATION='Bearer {}'.format(self.token)
         )
 
         r_data = json.loads(resp.content.decode('utf8'))
