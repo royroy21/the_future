@@ -66,9 +66,6 @@ class Armour(CommonFields):
 class ArmArmour(Armour):
     battle_item = models.ForeignKey('BattleItem')
 
-    def __str__(self):
-        return self.name
-
 
 class Head(Armour):
     pass
