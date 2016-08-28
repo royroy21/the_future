@@ -1,22 +1,16 @@
 import json
 
-from django.contrib.auth.models import User
 from django.test import TestCase
 
-from account.models import Account
 from player.models import LegArmour
+from utils.generic_tests import CreateUser
 
 
-class JwtTests(TestCase):
+class JwtTests(TestCase, CreateUser):
     url = '/api/jwt/'
 
     def setUp(self):
-        self.username = 'Cat'
-        self.password = 'CatNip1980'
-
-        user = User.objects.create_user(
-            username=self.username, password=self.password)
-        self.account = Account.objects.create(user=user)
+        self.user, self.token, self.account = self.create_user()
 
         self.leg_armour = LegArmour.objects.create(
             created_by=self.account,
@@ -29,24 +23,12 @@ class JwtTests(TestCase):
         )
 
     def test_get_and_authenticate_with_jwt(self):
-        data = {
-            'username': self.username,
-            'password': self.password,
-        }
-        resp = self.client.post(
-            self.url,
-            json.dumps(data),
-            content_type='application/json',
-        )
-        self.assertEqual(resp.status_code, 200)
-        token = json.loads(resp.content.decode('utf8'))['token']
-
         get_leg_no_auth = self.client.get(self.leg_armour.detail_url)
         self.assertEqual(get_leg_no_auth.status_code, 401)
 
         get_leg_with_auth = self.client.get(
             self.leg_armour.detail_url,
-            HTTP_AUTHORIZATION='Bearer {}'.format(token)
+            HTTP_AUTHORIZATION='Bearer {}'.format(self.token)
         )
 
         self.assertEqual(get_leg_with_auth.status_code, 200)
@@ -54,3 +36,4 @@ class JwtTests(TestCase):
             json.loads(get_leg_with_auth.content.decode('utf8'))['name'],
             self.leg_armour.name
         )
+

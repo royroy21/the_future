@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     # new
     'account',
     'custom_auth',
+    'django_nose',
     'player',
 ]
 
@@ -78,6 +79,8 @@ TEMPLATES = [
         },
     },
 ]
+
+TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
 
 WSGI_APPLICATION = 'the_future.wsgi.application'
 
