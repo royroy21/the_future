@@ -50,6 +50,9 @@ class PlayerTests(GenericDetailListTests, TestCase):
         }
 
     def test_create_player(self):
+
+        self.assertTrue(False)
+
         data = self.convert_fields_to_detail_url(
             self.create_obj_variables(), ['account', 'faction']
         )
