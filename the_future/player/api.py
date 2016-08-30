@@ -6,9 +6,7 @@ from utils.generic_resources import (
     COMMON_PREPARE_FIELDS, GenericCrudResource, GenericReadOnlyResource
 )
 from .forms import PlayerForm
-from .models import (
-    ArmArmour, BackPack, BodyArmour, Faction, Head, Player, LegArmour
-)
+from .models import Faction, Player
 
 
 GENERIC_ARMOUR_FIELDS = {
@@ -64,28 +62,3 @@ class FactionResource(GenericReadOnlyResource):
         'name': 'name',
         'description': 'description',
     }.update(COMMON_PREPARE_FIELDS))
-
-
-class ArmArmourResource(GenericReadOnlyResource):
-    model_cls = ArmArmour
-    preparer = FieldsPreparer(fields=GENERIC_ARMOUR_FIELDS_PlUS_WEAPON)
-
-
-class HeadResource(GenericReadOnlyResource):
-    model_cls = Head
-    preparer = FieldsPreparer(fields=GENERIC_ARMOUR_FIELDS)
-
-
-class LegArmourResource(GenericReadOnlyResource):
-    model_cls = LegArmour
-    preparer = FieldsPreparer(fields=GENERIC_ARMOUR_FIELDS)
-
-
-class BodyArmourResource(GenericReadOnlyResource):
-    model_cls = BodyArmour
-    preparer = FieldsPreparer(fields=GENERIC_ARMOUR_FIELDS)
-
-
-class BackPackResource(GenericReadOnlyResource):
-    model_cls = BackPack
-    preparer = FieldsPreparer(fields=GENERIC_ARMOUR_FIELDS)

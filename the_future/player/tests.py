@@ -2,24 +2,8 @@ import json
 
 from django.test import TestCase
 
-from player.models import Faction, LegArmour, Player
+from player.models import Faction, Player
 from utils.generic_tests import GenericDetailListTests
-
-
-class LegArmourTests(GenericDetailListTests, TestCase):
-    model_cls = LegArmour
-    url = '/api/leg-armour/'
-
-    def create_obj_variables(self):
-        return {
-            'created_by': self.account,
-            'modified_by': self.account,
-            'name': 'test name',
-            # 'description:': 'test description',
-            'amount_of_items': 2,
-            'health': 9,
-            'value': 100,
-        }
 
 
 class PlayerTests(GenericDetailListTests, TestCase):
@@ -66,3 +50,11 @@ class PlayerTests(GenericDetailListTests, TestCase):
 
         for k, v in data.items():
             self.assertEqual(r_data[k], str(v))
+
+    # TODO
+    def test_update_player(self):
+        pass
+
+    # TODO
+    def test_delete_player(self):
+        pass
