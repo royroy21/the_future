@@ -1,15 +1,14 @@
 from django.forms import ModelForm
 
 from account.models import Account
-from player.models import (
+from armour.models import (
     ArmArmour,
     BackPack,
     BodyArmour,
-    Faction,
-    Head,
+    HeadArmour,
     LegArmour,
-    Player,
 )
+from player.models import Faction, Player
 from utils.custom_form_fields import RelationshipUrlField
 
 
@@ -19,7 +18,7 @@ class PlayerForm(ModelForm):
         required=True
     )
     head_url = RelationshipUrlField(
-        model_type=Head,
+        model_type=HeadArmour,
         required=False
     )
     left_arm_url = RelationshipUrlField(

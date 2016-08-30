@@ -15,23 +15,24 @@ Including another URLconf
 """
 from django.conf.urls import patterns, url, include
 from django.contrib import admin
+from jwt_auth.views import obtain_jwt_token
 
 
 from account.api import AccountResource
-from player.api import (
+from armour.api import (
     ArmArmourResource,
     BackPackResource,
     BodyArmourResource,
-    FactionResource,
-    HeadResource,
+    HeadArmourResource,
     LegArmourResource,
-    PlayerResource,
 )
+from item.api import BattleItemResource, StandardItemResource
+from player.api import FactionResource, PlayerResource
 
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    url(r'^api/jwt/', 'jwt_auth.views.obtain_jwt_token'),
+    url(r'^api/jwt/', obtain_jwt_token),
 ]
 
 urlpatterns += patterns('',
@@ -50,13 +51,19 @@ urlpatterns += patterns('',
     url(r'{}'.format(FactionResource.model_cls.get_url_string()),
         include(FactionResource.urls()),
     ),
-    url(r'{}'.format(HeadResource.model_cls.get_url_string()),
-        include(HeadResource.urls()),
+    url(r'{}'.format(HeadArmourResource.model_cls.get_url_string()),
+        include(HeadArmourResource.urls()),
     ),
     url(r'{}'.format(LegArmourResource.model_cls.get_url_string()),
         include(LegArmourResource.urls()),
     ),
     url(r'{}'.format(PlayerResource.model_cls.get_url_string()),
         include(PlayerResource.urls()),
+    ),
+    url(r'{}'.format(BattleItemResource.model_cls.get_url_string()),
+        include(BattleItemResource.urls()),
+    ),
+    url(r'{}'.format(StandardItemResource.model_cls.get_url_string()),
+        include(StandardItemResource.urls()),
     ),
 )

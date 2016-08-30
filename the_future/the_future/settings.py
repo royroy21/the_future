@@ -45,8 +45,10 @@ INSTALLED_APPS = [
 
     # new
     'account',
+    'armour',
     'custom_auth',
     'django_nose',
+    'item',
     'player',
 ]
 
