@@ -9,19 +9,6 @@ from .forms import PlayerForm
 from .models import Faction, Player
 
 
-GENERIC_ARMOUR_FIELDS = {
-    'name': 'name',
-    'description': 'description',
-    # 'item': 'item',
-    'amount_of_items': 'amount_of_items',
-    'health': 'health',
-    'value': 'value',
-}
-GENERIC_ARMOUR_FIELDS.update(COMMON_PREPARE_FIELDS)
-GENERIC_ARMOUR_FIELDS_PlUS_WEAPON = copy(GENERIC_ARMOUR_FIELDS)
-GENERIC_ARMOUR_FIELDS_PlUS_WEAPON.update(
-    {'battle_item': 'battle_item'})
-
 PLAYER_FIELDS = {
     'account_url': 'account.detail_url',
     'title': 'title',
@@ -37,13 +24,6 @@ PLAYER_FIELDS = {
     'attacks': 'attacks',
     'leadership': 'leadership',
     'health': 'health',
-    # 'head_url': 'head.detail_url',
-    # 'left_arm_url': 'left_arm.detail_url',
-    # 'left_leg_url': 'left_leg.detail_url',
-    # 'right_arm_url': 'right_arm.detail_url',
-    # 'right_leg_url': 'right_leg.detail_url',
-    # 'body_url': 'body.detail_url',
-    # 'backpack_url': 'backpack.detail_url',
 }
 PLAYER_FIELDS.update(COMMON_PREPARE_FIELDS)
 
@@ -53,6 +33,26 @@ class PlayerResource(GenericCrudResource):
     form_cls = PlayerForm
 
     preparer = FieldsPreparer(fields=PLAYER_FIELDS)
+
+    def prepare(self, data):
+        extra_fields = super().prepare(data)
+        for field in [
+            'head',
+            'body',
+            'backpack',
+            'left_arm',
+            'left_leg',
+            'right_arm',
+            'right_leg',
+        ]:
+            field_obj = getattr(data, field)
+            field_name = '{}_url'.format(field)
+            if field_obj:
+                extra_fields[field_name] = field_obj.detail_url
+            else:
+                extra_fields[field_name] = None
+
+        return extra_fields
 
 
 class FactionResource(GenericReadOnlyResource):
