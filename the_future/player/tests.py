@@ -2,6 +2,7 @@ import json
 
 from django.test import TestCase
 
+from armour.models import LegArmour
 from player.models import Faction, Player
 from utils.generic_tests import GenericDetailListTests
 
@@ -15,6 +16,15 @@ class PlayerTests(GenericDetailListTests, TestCase):
             created_by=self.account, modified_by=self.account,
             name='First Born', description='A generic faction'
         )
+
+        armour_vars = {
+            'name': 'test name',
+            'amount_of_items': 2,
+            'health': 9,
+            'value': 100,
+        }
+        left_leg_armour = LegArmour.objects.create(**armour_vars)
+        right_leg_armour = LegArmour.objects.create(**armour_vars)
 
         return {
             'account': self.account,
@@ -31,11 +41,14 @@ class PlayerTests(GenericDetailListTests, TestCase):
             'attacks': 1,
             'leadership': 7,
             'health': 9,
+            'left_leg': left_leg_armour,
+            'right_leg': right_leg_armour,
         }
 
     def test_create_player(self):
+        convert_fields = ['account', 'faction', 'left_leg', 'right_leg']
         data = self.convert_fields_to_detail_url(
-            self.create_obj_variables(), ['account', 'faction']
+            self.create_obj_variables(), convert_fields
         )
 
         resp = self.client.post(

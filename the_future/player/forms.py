@@ -62,7 +62,7 @@ class PlayerForm(ModelForm):
         if self.cleaned_data['right_arm_url'] is not None:
             self.instance.right_arm = self.cleaned_data['right_arm_url']
         if self.cleaned_data['right_leg_url'] is not None:
-            self.instance.right_leg = self.cleaned_data['right_leg']
+            self.instance.right_leg = self.cleaned_data['right_leg_url']
         if self.cleaned_data['body_url'] is not None:
             self.instance.body = self.cleaned_data['body_url']
         if self.cleaned_data['backpack_url'] is not None:

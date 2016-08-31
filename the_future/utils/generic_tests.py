@@ -68,9 +68,11 @@ class GenericDetailListTests(CreateUser):
             try:
                 self.assertEquals(str(v), str(getattr(self.test_obj, k)))
             except (AssertionError, AttributeError):
-                self.assertEquals(
-                    v, getattr(self.test_obj, k.strip('_url')
-                    ).detail_url)
+                obj_value = getattr(self.test_obj, k.replace('_url', ''))
+                if not obj_value:
+                    self.assertFalse(v)
+                else:
+                    self.assertEquals(v, obj_value.detail_url)
 
     def test_detail(self):
         resp = self.client.get(
