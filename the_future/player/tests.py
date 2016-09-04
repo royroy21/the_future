@@ -3,6 +3,8 @@ import json
 from django.test import TestCase
 
 from armour.models import LegArmour
+from armour.factories import ArmArmourFactory
+from player.factories import PlayerFactory
 from player.models import Faction, Player
 from utils.generic_tests import GenericDetailListTests
 
@@ -64,10 +66,46 @@ class PlayerTests(GenericDetailListTests, TestCase):
         for k, v in data.items():
             self.assertEqual(r_data[k], str(v))
 
-    # TODO
     def test_update_player(self):
-        pass
+        player_obj = PlayerFactory()
+        arm_obj = ArmArmourFactory()
 
-    # TODO
+        get_resp = self.client.get(
+            player_obj.detail_url,
+            HTTP_AUTHORIZATION='Bearer {}'.format(self.token),
+        )
+        get_data = json.loads(get_resp.content.decode('utf8'))
+
+        first_name = 'Cat'
+        last_name = 'Meow'
+        get_data['first_name'] = first_name
+        get_data['last_name'] = last_name
+        get_data['left_arm_url'] = arm_obj.detail_url
+
+        put_resp = self.client.put(
+            player_obj.detail_url,
+            data=json.dumps(get_data),
+            content_type='application/json',
+            HTTP_AUTHORIZATION='Bearer {}'.format(self.token),
+        )
+        put_data = json.loads(put_resp.content.decode('utf8'))
+
+        self.assertEqual(put_resp.status_code, 202)
+        self.assertEqual(put_data['first_name'], first_name)
+        self.assertEqual(put_data['last_name'], last_name)
+        self.assertEqual(put_data['left_arm_url'], arm_obj.detail_url)
+
     def test_delete_player(self):
-        pass
+        player_obj = PlayerFactory()
+        self.assertTrue(
+            Player.objects.filter(id=player_obj.id, is_active=True).exists()
+        )
+
+        resp = self.client.delete(
+            player_obj.detail_url,
+            HTTP_AUTHORIZATION='Bearer {}'.format(self.token),
+        )
+        self.assertEqual(resp.status_code, 204)
+        self.assertFalse(
+            Player.objects.filter(id=player_obj.id, is_active=True).exists()
+        )

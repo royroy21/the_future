@@ -31,7 +31,7 @@ class GenericCrudResource(GenericReadOnlyResource):
 
     def reference_object(self, pk):
         try:
-            return self.model_cls.objects.get(uid=pk, is_active=True)
+            return self.model_cls.objects.get(id=pk, is_active=True)
         except self.model_cls.DoesNotExist:
             raise NotFound
 
