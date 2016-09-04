@@ -1,6 +1,6 @@
 import factory
 
-from account.factory import AccountFactory
+from account.factories import AccountFactory
 
 
 class CommonFields(factory.django.DjangoModelFactory):

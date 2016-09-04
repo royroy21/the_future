@@ -1,8 +1,8 @@
 import factory
 import random
 
-from account.factory import AccountFactory
-from armour.factory import (
+from account.factories import AccountFactory
+from armour.factories import (
     ArmArmourFactory,
     BackPackFactory,
     BodyArmourFactory,
