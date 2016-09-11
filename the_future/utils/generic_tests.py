@@ -76,6 +76,11 @@ class GenericDetailListTests(CreateUser):
                     self.assertEqual(
                         [o.detail_url for o in obj_value.all()], v
                     )
+                # self vs detail_url
+                elif k == 'self':
+                    self.assertEquals(
+                        str(v), str(getattr(self.test_obj, 'detail_url'))
+                    )
                 else:
                     self.fail('problem testing "{}" field'.format(k))
 
