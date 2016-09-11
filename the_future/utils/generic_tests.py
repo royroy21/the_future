@@ -40,19 +40,14 @@ class CreateUser(object):
 
 class GenericDetailListTests(CreateUser):
     url = None
-    model_cls = None
+    factory_cls = None
 
     def setUp(self):
         self.user, self.token, self.account = self.create_user()
+        self.test_obj = self._create_test_obj()
 
-        create_vars = self.create_obj_variables()
-        create_vars.update(
-            {'created_by': self.account, 'modified_by': self.account}
-        )
-        self.test_obj = self.model_cls.objects.create(**create_vars)
-
-    def create_obj_variables(self):
-        pass
+    def _create_test_obj(self):
+        return self.factory_cls()
 
     def convert_fields_to_detail_url(self, data, field_array):
         """Converts fields in data so to be JSON friendly
@@ -68,11 +63,21 @@ class GenericDetailListTests(CreateUser):
             try:
                 self.assertEquals(str(v), str(getattr(self.test_obj, k)))
             except (AssertionError, AttributeError):
-                obj_value = getattr(self.test_obj, k.replace('_url', ''))
-                if not obj_value:
-                    self.assertFalse(v)
+                # testing standard URL field
+                if k.endswith('_url'):
+                    obj_value = getattr(self.test_obj, k.replace('_url', ''))
+                    if not obj_value:
+                        self.assertFalse(v)
+                    else:
+                        self.assertEquals(v, obj_value.detail_url)
+                # testing many to many fields
+                elif k.endswith('_urls'):
+                    obj_value = getattr(self.test_obj, k.replace('_url', ''))
+                    self.assertEqual(
+                        [o.detail_url for o in obj_value.all()], v
+                    )
                 else:
-                    self.assertEquals(v, obj_value.detail_url)
+                    self.fail('problem testing "{}" field'.format(k))
 
     def test_detail(self):
         resp = self.client.get(
@@ -82,7 +87,6 @@ class GenericDetailListTests(CreateUser):
 
         self.assertEqual(resp.status_code, 200)
         resp_data = json.loads(resp.content.decode('utf8'))
-
         self._test_fields(resp_data)
 
     def test_list(self):

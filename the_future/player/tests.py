@@ -2,31 +2,20 @@ import json
 
 from django.test import TestCase
 
-from armour.models import LegArmour
 from armour.factories import ArmArmourFactory
-from player.factories import PlayerFactory
-from player.models import Faction, Player
+from player.factories import FactionFactory, PlayerFactory, LegArmourFactory
+from player.models import Player
 from utils.generic_tests import GenericDetailListTests
 
 
 class PlayerTests(GenericDetailListTests, TestCase):
-    model_cls = Player
+    factory_cls = PlayerFactory
     url = '/api/player/'
 
     def create_obj_variables(self):
-        faction = Faction.objects.create(
-            created_by=self.account, modified_by=self.account,
-            name='First Born', description='A generic faction'
-        )
-
-        armour_vars = {
-            'name': 'test name',
-            'amount_of_items': 2,
-            'health': 9,
-            'value': 100,
-        }
-        left_leg_armour = LegArmour.objects.create(**armour_vars)
-        right_leg_armour = LegArmour.objects.create(**armour_vars)
+        faction = FactionFactory()
+        left_leg_armour = LegArmourFactory()
+        right_leg_armour = LegArmourFactory()
 
         return {
             'account': self.account,

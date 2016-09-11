@@ -1,7 +1,7 @@
 from django.test import TestCase
 
 from utils.generic_tests import GenericDetailListTests
-from .models import BattleItem, StandardItem
+from .factories import BattleItemFactory, StandardItemFactory
 
 
 class SharedCreateObjVariables(object):
@@ -15,11 +15,11 @@ class SharedCreateObjVariables(object):
 
 class BattleItemTests(SharedCreateObjVariables, GenericDetailListTests,
                       TestCase):
-    model_cls = BattleItem
+    factory_cls = BattleItemFactory
     url = '/api/battle-item/'
 
 
 class StandardItemTests(SharedCreateObjVariables, GenericDetailListTests,
                         TestCase):
-    model_cls = StandardItem
+    factory_cls = StandardItemFactory
     url = '/api/standard-item/'
