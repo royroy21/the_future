@@ -1,5 +1,3 @@
-from copy import copy
-
 from restless.preparers import FieldsPreparer
 
 from utils.generic_resources import (

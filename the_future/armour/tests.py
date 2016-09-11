@@ -1,56 +1,42 @@
 from django.test import TestCase
 
 from utils.generic_tests import GenericDetailListTests
-from item.models import BattleItem
-from .models import (
-    ArmArmour, BackPack, BodyArmour, HeadArmour, LegArmour
+from item.factories import BattleItemFactory, StandardItemFactory
+from .factories import (
+    ArmArmourFactory, BackPackFactory, BodyArmourFactory,
+    HeadArmourFactory, LegArmourFactory
 )
 
 
-class SharedCreateObjVariables(object):
-
-    def create_obj_variables(self):
-        return {
-            'created_by': self.account,
-            'modified_by': self.account,
-            'name': 'test name',
-            # 'description:': 'test description',
-            'amount_of_items': 2,
-            'health': 9,
-            'value': 100,
-        }
-
-
-class LegArmourTests(SharedCreateObjVariables, GenericDetailListTests,
-                     TestCase):
-    model_cls = LegArmour
+class LegArmourTests(GenericDetailListTests, TestCase):
+    factory_cls = LegArmourFactory
     url = '/api/leg-armour/'
 
 
-class ArmArmourTests(SharedCreateObjVariables, GenericDetailListTests,
-                     TestCase):
-    model_cls = ArmArmour
+class ArmArmourTests(GenericDetailListTests, TestCase):
+    factory_cls = ArmArmourFactory
     url = '/api/arm-armour/'
 
-    def create_obj_variables(self):
-        obj_vars = super().create_obj_variables()
-        obj_vars['battle_item'] = BattleItem.objects.create()
-        return obj_vars
+    def _create_test_obj(self):
+        battle_item = BattleItemFactory()
+        item_1 = StandardItemFactory()
+        item_2 = StandardItemFactory()
+        return self.factory_cls(
+            battle_items=(battle_item,),
+            items=(item_1, item_2),
+        )
 
 
-class HeadArmourTests(SharedCreateObjVariables, GenericDetailListTests,
-                      TestCase):
-    model_cls = HeadArmour
+class HeadArmourTests(GenericDetailListTests, TestCase):
+    factory_cls = HeadArmourFactory
     url = '/api/head-armour/'
 
 
-class BodyArmourTests(SharedCreateObjVariables, GenericDetailListTests,
-                      TestCase):
-    model_cls = BodyArmour
+class BodyArmourTests(GenericDetailListTests, TestCase):
+    factory_cls = BodyArmourFactory
     url = '/api/body-armour/'
 
 
-class BackPackTests(SharedCreateObjVariables, GenericDetailListTests,
-                    TestCase):
-    model_cls = BackPack
+class BackPackTests(GenericDetailListTests, TestCase):
+    factory_cls = BackPackFactory
     url = '/api/back-pack/'

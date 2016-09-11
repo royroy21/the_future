@@ -3,8 +3,8 @@ from restless.exceptions import BadRequest, NotFound
 
 
 COMMON_PREPARE_FIELDS = {
-    'created_by': 'created_by.detail_url',
-    'modified_by': 'modified_by.detail_url',
+    'created_by_url': 'created_by.detail_url',
+    'modified_by_url': 'modified_by.detail_url',
 
     # TODO - isoformat causes 500
     # 'created': 'created.isoformat',
@@ -14,7 +14,7 @@ COMMON_PREPARE_FIELDS = {
 
 
 class GenericReadOnlyResource(DjangoResource):
-    model_cls = None
+    factory_cls = None
     form_cls = None
 
     def is_authenticated(self):
