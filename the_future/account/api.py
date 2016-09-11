@@ -10,21 +10,31 @@ from .models import Account
 class AccountResource(GenericReadOnlyResource):
     model_cls = Account
 
-    preparer = FieldsPreparer(fields={'username': 'user.username'})
+    preparer = FieldsPreparer(fields={
+        'self': 'detail_url',
+        'username': 'user.username'
+    })
 
     def is_authenticated(self):
-        """We don't test for authentication on create
-        """
-        if not self.data:
+        # TODO - this probably won't be good enough for UPDATE
+        if self.request.method == 'POST':
             return True
 
-        user_is_updating_self = self.request.user.id == self.data.id
+        # if no account id in url then list method called
+        try:
+            account_id = self.request.path.split('/')[3]
+        except IndexError:
+            return self.request.user.is_authenticated()
+
+        # users can only update or delete their own account
+        account_obj = self.reference_object(account_id)
+        user_is_updating_self = self.request.user.id == account_obj.user.id
         return (self.request.user.is_authenticated()
                 and user_is_updating_self)
 
     def reference_object(self, pk):
         try:
-            return self.model_cls.objects.get(id=pk, is_active=True)
+            return self.model_cls.objects.get(id=pk, user__is_active=True)
         except self.model_cls.DoesNotExist:
             raise NotFound
 
@@ -40,5 +50,5 @@ class AccountResource(GenericReadOnlyResource):
 
     def delete(self, pk):
         obj = self.reference_object(pk)
-        obj.is_active = False
-        obj.save()
+        obj.user.is_active = False
+        obj.user.save()

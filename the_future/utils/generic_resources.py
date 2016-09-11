@@ -3,6 +3,7 @@ from restless.exceptions import BadRequest, NotFound
 
 
 COMMON_PREPARE_FIELDS = {
+    'self': 'detail_url',
     'created_by_url': 'created_by.detail_url',
     'modified_by_url': 'modified_by.detail_url',
 
