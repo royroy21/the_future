@@ -4,6 +4,7 @@ from account.models import Account
 from armour.models import (
     ArmArmour, BackPack, BodyArmour, HeadArmour, LegArmour
 )
+from item.models import BattleItem, ShieldItem
 from utils.generic_models import CommonFields
 
 
@@ -33,18 +34,32 @@ class Player(CommonFields):
     leadership = models.DecimalField(max_digits=1, decimal_places=0)
     health = models.DecimalField(max_digits=1, decimal_places=0)
 
-    # armour
-    head = models.ForeignKey(HeadArmour, blank=True, null=True)
-    body = models.ForeignKey(BodyArmour, blank=True, null=True)
-    backpack = models.ForeignKey(BackPack, blank=True, null=True)
-    left_arm = models.ForeignKey(ArmArmour, related_name='left_arm',
-                                 blank=True, null=True)
-    left_leg = models.ForeignKey(LegArmour, related_name='left_leg',
-                                 blank=True, null=True)
-    right_arm = models.ForeignKey(ArmArmour, related_name='right_arm',
-                                  blank=True, null=True)
-    right_leg = models.ForeignKey(LegArmour, related_name='right_leg',
-                                  blank=True, null=True)
+    # equipped armour
+    equipped_head_armour = models.ForeignKey(
+        HeadArmour, blank=True, null=True
+    )
+    equipped_body_armour = models.ForeignKey(
+        BodyArmour, blank=True, null=True
+    )
+    equipped_backpack = models.ForeignKey(
+        BackPack, blank=True, null=True
+    )
+    equipped_left_arm_armour = models.ForeignKey(
+        ArmArmour, related_name='left_arm', blank=True, null=True
+    )
+    equipped_left_leg_armour = models.ForeignKey(
+        LegArmour, related_name='left_leg', blank=True, null=True
+    )
+    equipped_right_arm_armour = models.ForeignKey(
+        ArmArmour, related_name='right_arm', blank=True, null=True
+    )
+    equipped_right_leg_armour = models.ForeignKey(
+        LegArmour, related_name='right_leg', blank=True, null=True
+    )
+
+    # equipped items
+    equipped_battle_item = models.ForeignKey(BattleItem, blank=True, null=True)
+    equipped_shield_item = models.ForeignKey(ShieldItem, blank=True, null=True)
 
     def __str__(self):
         return '({}) {} {} {}'.format(

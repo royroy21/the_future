@@ -32,12 +32,16 @@ class PlayerTests(GenericDetailListTests, TestCase):
             'attacks': 1,
             'leadership': 7,
             'health': 9,
-            'left_leg': left_leg_armour,
-            'right_leg': right_leg_armour,
+            'equipped_left_leg_armour': left_leg_armour,
+            'equipped_right_leg_armour': right_leg_armour,
         }
 
     def test_create_player(self):
-        convert_fields = ['account', 'faction', 'left_leg', 'right_leg']
+        convert_fields = [
+            'account', 'faction',
+            'equipped_left_leg_armour',
+            'equipped_right_leg_armour'
+        ]
         data = self.convert_fields_to_detail_url(
             self.create_obj_variables(), convert_fields
         )
@@ -69,7 +73,7 @@ class PlayerTests(GenericDetailListTests, TestCase):
         last_name = 'Meow'
         get_data['first_name'] = first_name
         get_data['last_name'] = last_name
-        get_data['left_arm_url'] = arm_obj.detail_url
+        get_data['equipped_left_arm_armour_url'] = arm_obj.detail_url
 
         put_resp = self.client.put(
             player_obj.detail_url,
@@ -82,7 +86,9 @@ class PlayerTests(GenericDetailListTests, TestCase):
         self.assertEqual(put_resp.status_code, 202)
         self.assertEqual(put_data['first_name'], first_name)
         self.assertEqual(put_data['last_name'], last_name)
-        self.assertEqual(put_data['left_arm_url'], arm_obj.detail_url)
+        self.assertEqual(
+            put_data['equipped_left_arm_armour_url'], arm_obj.detail_url
+        )
 
     def test_delete_player(self):
         player_obj = PlayerFactory()

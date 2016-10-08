@@ -9,6 +9,7 @@ from armour.factories import (
     HeadArmourFactory,
     LegArmourFactory,
 )
+from item.factories import BattleItemFactory, ShieldItemFactory
 from utils.factory_functions import CommonFields
 
 from .models import Faction, Player
@@ -37,13 +38,15 @@ class PlayerFactory(CommonFields):
     attacks = random.choice(range(10))
     leadership = random.choice(range(10))
     health = random.choice(range(10))
-    head = factory.SubFactory(HeadArmourFactory)
-    body = factory.SubFactory(BodyArmourFactory)
-    backpack = factory.SubFactory(BackPackFactory)
-    left_arm = factory.SubFactory(ArmArmourFactory)
-    left_leg = factory.SubFactory(LegArmourFactory)
-    right_arm = factory.SubFactory(ArmArmourFactory)
-    right_leg = factory.SubFactory(LegArmourFactory)
+    equipped_head_armour = factory.SubFactory(HeadArmourFactory)
+    equipped_body_armour = factory.SubFactory(BodyArmourFactory)
+    equipped_backpack = factory.SubFactory(BackPackFactory)
+    equipped_left_arm_armour = factory.SubFactory(ArmArmourFactory)
+    equipped_left_leg_armour = factory.SubFactory(LegArmourFactory)
+    equipped_right_arm_armour = factory.SubFactory(ArmArmourFactory)
+    equipped_right_leg_armour = factory.SubFactory(LegArmourFactory)
+    equipped_battle_item = factory.SubFactory(BattleItemFactory)
+    equipped_shield_item = factory.SubFactory(ShieldItemFactory)
 
     class Meta:
         model = Player

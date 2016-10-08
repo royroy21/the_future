@@ -1,7 +1,6 @@
 from django.test import TestCase
 
 from utils.generic_tests import GenericDetailListTests
-from item.factories import BattleItemFactory, StandardItemFactory
 from .factories import (
     ArmArmourFactory, BackPackFactory, BodyArmourFactory,
     HeadArmourFactory, LegArmourFactory
@@ -16,15 +15,6 @@ class LegArmourTests(GenericDetailListTests, TestCase):
 class ArmArmourTests(GenericDetailListTests, TestCase):
     factory_cls = ArmArmourFactory
     url = '/api/arm-armour/'
-
-    def _create_test_obj(self):
-        battle_item = BattleItemFactory()
-        item_1 = StandardItemFactory()
-        item_2 = StandardItemFactory()
-        return self.factory_cls(
-            battle_items=(battle_item,),
-            items=(item_1, item_2),
-        )
 
 
 class HeadArmourTests(GenericDetailListTests, TestCase):

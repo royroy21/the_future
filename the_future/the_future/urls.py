@@ -26,7 +26,9 @@ from armour.api import (
     HeadArmourResource,
     LegArmourResource,
 )
-from item.api import BattleItemResource, StandardItemResource
+from item.api import (
+    BattleItemResource, ShieldItemResource, StandardItemResource,
+)
 from player.api import FactionResource, PlayerResource
 
 
@@ -62,6 +64,9 @@ urlpatterns += patterns('',
     ),
     url(r'{}'.format(BattleItemResource.model_cls.get_url_string()),
         include(BattleItemResource.urls()),
+    ),
+    url(r'{}'.format(ShieldItemResource.model_cls.get_url_string()),
+        include(ShieldItemResource.urls()),
     ),
     url(r'{}'.format(StandardItemResource.model_cls.get_url_string()),
         include(StandardItemResource.urls()),

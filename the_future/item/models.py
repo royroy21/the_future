@@ -1,9 +1,13 @@
 from utils.generic_models import CommonFields
 
 
-class BattleItem(CommonFields):
+class StandardItem(CommonFields):
     pass
 
 
-class StandardItem(CommonFields):
+class BattleItem(StandardItem):
+    pass
+
+
+class ShieldItem(StandardItem):
     pass
