@@ -17,7 +17,6 @@ class JwtTests(TestCase, CreateUser):
             modified_by=self.account,
             name='test name',
             description='test description',
-            amount_of_items=2,
             health=9,
             value=100,
         )

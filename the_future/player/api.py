@@ -35,13 +35,15 @@ class PlayerResource(GenericCrudResource):
     def prepare(self, data):
         extra_fields = super().prepare(data)
         for field in [
-            'head',
-            'body',
-            'backpack',
-            'left_arm',
-            'left_leg',
-            'right_arm',
-            'right_leg',
+            'equipped_head_armour',
+            'equipped_body_armour',
+            'equipped_backpack',
+            'equipped_left_arm_armour',
+            'equipped_left_leg_armour',
+            'equipped_right_arm_armour',
+            'equipped_right_leg_armour',
+            'equipped_battle_item',
+            'equipped_shield_item',
         ]:
             field_obj = getattr(data, field)
             field_name = '{}_url'.format(field)

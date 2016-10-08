@@ -1,6 +1,11 @@
 from utils.factory_functions import CommonFields
 
-from .models import BattleItem, StandardItem
+from .models import BattleItem, ShieldItem, StandardItem
+
+
+class StandardItemFactory(CommonFields):
+    class Meta:
+        model = StandardItem
 
 
 class BattleItemFactory(CommonFields):
@@ -8,6 +13,6 @@ class BattleItemFactory(CommonFields):
         model = BattleItem
 
 
-class StandardItemFactory(CommonFields):
+class ShieldItemFactory(CommonFields):
     class Meta:
-        model = StandardItem
+        model = ShieldItem
