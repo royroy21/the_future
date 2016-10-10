@@ -9,7 +9,6 @@ from armour.factories import (
     HeadArmourFactory,
     LegArmourFactory,
 )
-from event.factories import PlayerEventDirectoryFactory
 from item.factories import BattleItemFactory, ShieldItemFactory
 from utils.factory_functions import CommonFields
 
