@@ -26,6 +26,12 @@ from armour.api import (
     HeadArmourResource,
     LegArmourResource,
 )
+from event.api import (
+    EventResource,
+    PlayerEventTitleResource,
+    PlayerEventValueResource,
+    PlayerEventDirectoryResource,
+)
 from item.api import (
     BattleItemResource, ShieldItemResource, StandardItemResource,
 )
@@ -38,6 +44,18 @@ urlpatterns = [
 ]
 
 urlpatterns += patterns('',
+    url(r'{}'.format(EventResource.model_cls.get_url_string()),
+        include(EventResource.urls()),
+    ),
+    url(r'{}'.format(PlayerEventTitleResource.model_cls.get_url_string()),
+        include(PlayerEventTitleResource.urls()),
+    ),
+    url(r'{}'.format(PlayerEventValueResource.model_cls.get_url_string()),
+        include(PlayerEventValueResource.urls()),
+    ),
+    url(r'{}'.format(PlayerEventDirectoryResource.model_cls.get_url_string()),
+        include(PlayerEventDirectoryResource.urls()),
+    ),
     url(r'{}'.format(AccountResource.model_cls.get_url_string()),
         include(AccountResource.urls()),
     ),

@@ -9,6 +9,7 @@ from armour.factories import (
     HeadArmourFactory,
     LegArmourFactory,
 )
+from event.factories import PlayerEventDirectoryFactory
 from item.factories import BattleItemFactory, ShieldItemFactory
 from utils.factory_functions import CommonFields
 
@@ -47,6 +48,17 @@ class PlayerFactory(CommonFields):
     equipped_right_leg_armour = factory.SubFactory(LegArmourFactory)
     equipped_battle_item = factory.SubFactory(BattleItemFactory)
     equipped_shield_item = factory.SubFactory(ShieldItemFactory)
+
+    @factory.post_generation
+    def player_event_directory(self, create, extracted, **kwargs):
+        if not create:
+            # Simple build, do nothing.
+            return
+
+        if extracted:
+            # A list of groups were passed in, use them
+            for group in extracted:
+                self.player_event_directory.add(group)
 
     class Meta:
         model = Player

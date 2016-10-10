@@ -42,6 +42,8 @@ class GenericDetailListTests(CreateUser):
     url = None
     factory_cls = None
 
+    white_list_for_test_field = None
+
     def setUp(self):
         self.user, self.token, self.account = self.create_user()
         self.test_obj = self._create_test_obj()
@@ -58,8 +60,18 @@ class GenericDetailListTests(CreateUser):
 
         return data
 
-    def _test_fields(self, data):
+    def _test_fields(self, data, white_list=None):
+        if self.white_list_for_test_field:
+            white_list = self.white_list_for_test_field
+        elif white_list:
+            white_list = white_list
+        else:
+            white_list = []
+
         for k, v in data.items():
+            if k in white_list:
+                continue
+
             try:
                 self.assertEquals(str(v), str(getattr(self.test_obj, k)))
             except (AssertionError, AttributeError):

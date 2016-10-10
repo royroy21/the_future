@@ -4,6 +4,7 @@ from account.models import Account
 from armour.models import (
     ArmArmour, BackPack, BodyArmour, HeadArmour, LegArmour
 )
+from event.models import PlayerEventDirectory
 from item.models import BattleItem, ShieldItem
 from utils.generic_models import CommonFields
 
@@ -61,6 +62,11 @@ class Player(CommonFields):
     equipped_battle_item = models.ForeignKey(BattleItem, blank=True, null=True)
     equipped_shield_item = models.ForeignKey(ShieldItem, blank=True, null=True)
 
+    player_event_directory = models.ManyToManyField(
+        PlayerEventDirectory, blank=True
+    )
+
     def __str__(self):
         return '({}) {} {} {}'.format(
             self.faction.name, self.title, self.first_name, self.last_name)
+

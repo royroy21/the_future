@@ -52,6 +52,12 @@ class PlayerResource(GenericCrudResource):
             else:
                 extra_fields[field_name] = None
 
+        # many to many
+        extra_fields['player_event_directory_urls'] = [
+            o.detail_url for o in data.player_event_directory.filter(
+                is_active=True)
+        ]
+
         return extra_fields
 
 

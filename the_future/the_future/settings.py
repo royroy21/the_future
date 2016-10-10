@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'armour',
     'custom_auth',
     'django_nose',
+    'event',
     'item',
     'player',
 ]

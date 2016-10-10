@@ -3,6 +3,7 @@ import json
 from django.test import TestCase
 
 from armour.factories import ArmArmourFactory
+from event.factories import PlayerEventDirectoryFactory
 from player.factories import FactionFactory, PlayerFactory, LegArmourFactory
 from player.models import Player
 from utils.generic_tests import GenericDetailListTests
@@ -11,6 +12,8 @@ from utils.generic_tests import GenericDetailListTests
 class PlayerTests(GenericDetailListTests, TestCase):
     factory_cls = PlayerFactory
     url = '/api/player/'
+
+    white_list_for_test_field = ['player_event_directory_urls']
 
     def create_obj_variables(self):
         faction = FactionFactory()
@@ -89,6 +92,30 @@ class PlayerTests(GenericDetailListTests, TestCase):
         self.assertEqual(
             put_data['equipped_left_arm_armour_url'], arm_obj.detail_url
         )
+
+    def test_player_event_directory_factory(self):
+        player_event_directory_1 = PlayerEventDirectoryFactory()
+        player_event_directory_2 = PlayerEventDirectoryFactory()
+        player_event_directories = [
+            player_event_directory_1, player_event_directory_2,
+        ]
+        player_obj = PlayerFactory(
+            player_event_directory=player_event_directories
+        )
+
+        get_resp = self.client.get(
+            player_obj.detail_url,
+            HTTP_AUTHORIZATION='Bearer {}'.format(self.token),
+        )
+        get_data = json.loads(get_resp.content.decode('utf8'))
+
+        for player_event_directory in player_event_directories:
+            self.assertIn(
+                player_event_directory.detail_url,
+                get_data['player_event_directory_urls']
+            )
+
+        self.assertEqual(len(get_data['player_event_directory_urls']), 2)
 
     def test_delete_player(self):
         player_obj = PlayerFactory()
