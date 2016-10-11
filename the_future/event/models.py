@@ -1,9 +1,7 @@
+from django.contrib.contenttypes.fields import GenericForeignKey
+from django.contrib.contenttypes.models import ContentType
 from django.db import models
 
-from armour.models import (
-    ArmArmour, BackPack, BodyArmour, HeadArmour, LegArmour
-)
-from item.models import BattleItem, ShieldItem
 from utils.generic_models import CommonFields
 
 
@@ -57,41 +55,16 @@ class Event(CommonFields):
         related_name='player_event_needed',
     )
 
-    # awards
-    player_event_awarded = models.ManyToManyField(
-        PlayerEventDirectory, blank=True
-    )
-    head_armour_awarded = models.ManyToManyField(
-        HeadArmour, blank=True
-    )
-    body_armour_awarded = models.ManyToManyField(
-        BodyArmour, blank=True
-    )
-    backpack_awarded = models.ManyToManyField(
-        BackPack, blank=True
-    )
-    arm_armour_awarded = models.ManyToManyField(
-        ArmArmour, blank=True
-    )
-    leg_armour_awarded = models.ManyToManyField(
-        LegArmour, blank=True
-    )
-    battle_item_awarded = models.ManyToManyField(
-        BattleItem, blank=True
-    )
-    shield_item_awarded = models.ManyToManyField(
-        ShieldItem, blank=True
-    )
-
     # player event directory value if completed
     player_event_directory = models.ManyToManyField(
         PlayerEventDirectory, blank=True,
         related_name='player_event_directory',
     )
 
-    # TODO -
-    # misc
-    # last_event =
+    # event content
+    content_type = models.ForeignKey(ContentType, null=True, blank=True)
+    object_id = models.PositiveIntegerField()
+    content_object = GenericForeignKey()
 
     def __str__(self):
         return self.title

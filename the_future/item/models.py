@@ -1,8 +1,10 @@
+from django.contrib.contenttypes.fields import GenericRelation
+
 from utils.generic_models import CommonFields
 
 
 class StandardItem(CommonFields):
-    pass
+    events = GenericRelation('Event', null=True, blank=True)
 
 
 class BattleItem(StandardItem):
