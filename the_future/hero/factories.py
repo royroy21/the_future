@@ -3,8 +3,6 @@ import random
 
 from item.factories import (
     ArmourFactory,
-    # AbilityFactory,
-    # ItemFactory,
     ShieldFactory,
     WeaponFactory,
 )

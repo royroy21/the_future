@@ -129,3 +129,12 @@ class HeroTests(GenericDetailListTests, TestCase):
         self.assertFalse(
             Hero.objects.filter(id=hero.id, is_active=True).exists()
         )
+
+    def test_hero_factory(self):
+        ability = AbilityFactory()
+        item = ItemFactory()
+        hero = HeroFactory(abilities=[ability], items=[item])
+
+        self.assertTrue(hero.armour)
+        self.assertIn(ability, hero.abilities.all())
+        self.assertIn(item, hero.items.all())
