@@ -1,8 +1,13 @@
 from django.contrib import admin
 
-from .models import Player
+from .models import Faction, Player
 
 
 @admin.register(Player)
 class PlayerAdmin(admin.ModelAdmin):
+    pass
+
+
+@admin.register(Faction)
+class FactionAdmin(admin.ModelAdmin):
     pass

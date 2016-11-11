@@ -26,7 +26,7 @@ class CommonFields(models.Model, DetailURLMixin):
 
 
 class ModifierField(models.Model):
-    """Used if an item has an affect
+    """Used if an item has an affect on a hero
     """
     modifiers = JSONField(null=True, blank=True)
 
