@@ -1,3 +1,4 @@
+from django.contrib.postgres.fields import JSONField
 from django.db import models
 from django.utils import timezone
 
@@ -22,3 +23,21 @@ class CommonFields(models.Model, DetailURLMixin):
     @property
     def detail_url(self):
         return self.get_detail_url()
+
+
+class ModifierField(models.Model):
+    """Used if an item has an affect
+    """
+    modifiers = JSONField(null=True, blank=True)
+
+    class Meta:
+        abstract = True
+
+
+class MonetaryField(models.Model):
+    """Used to determine value of an item
+    """
+    monetary_value = models.DecimalField(max_digits=7, decimal_places=0)
+
+    class Meta:
+        abstract = True

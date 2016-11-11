@@ -53,7 +53,12 @@ class GenericDetailListTests(CreateUser):
         """Converts fields in data so to be JSON friendly
         """
         for field in field_array:
-            data['{}_url'.format(field)] = data[field].detail_url
+            if isinstance(data[field], list):
+                data['{}_urls'.format(field)] = [d.detail_url
+                                                 for d in data[field]]
+            else:
+                data['{}_url'.format(field)] = data[field].detail_url
+
             del data[field]
 
         return data
@@ -72,7 +77,7 @@ class GenericDetailListTests(CreateUser):
                         self.assertEquals(v, obj_value.detail_url)
                 # testing many to many fields
                 elif k.endswith('_urls'):
-                    obj_value = getattr(self.test_obj, k.replace('_url', ''))
+                    obj_value = getattr(self.test_obj, k.replace('_urls', ''))
                     self.assertEqual(
                         [o.detail_url for o in obj_value.all()], v
                     )

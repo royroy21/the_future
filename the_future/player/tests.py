@@ -2,8 +2,7 @@ import json
 
 from django.test import TestCase
 
-from armour.factories import ArmArmourFactory
-from player.factories import FactionFactory, PlayerFactory, LegArmourFactory
+from player.factories import FactionFactory, PlayerFactory
 from player.models import Player
 from utils.generic_tests import GenericDetailListTests
 
@@ -14,8 +13,6 @@ class PlayerTests(GenericDetailListTests, TestCase):
 
     def create_obj_variables(self):
         faction = FactionFactory()
-        left_leg_armour = LegArmourFactory()
-        right_leg_armour = LegArmourFactory()
 
         return {
             'account': self.account,
@@ -23,24 +20,11 @@ class PlayerTests(GenericDetailListTests, TestCase):
             'first_name': 'Roy',
             'last_name': 'Hanley',
             'faction': faction,
-            'melee': 4,
-            'ballistic': 4,
-            'strength': 4,
-            'toughness': 4,
-            'wounds': 1,
-            'initiative': 8,
-            'attacks': 1,
-            'leadership': 7,
-            'health': 9,
-            'equipped_left_leg_armour': left_leg_armour,
-            'equipped_right_leg_armour': right_leg_armour,
         }
 
     def test_create_player(self):
         convert_fields = [
             'account', 'faction',
-            'equipped_left_leg_armour',
-            'equipped_right_leg_armour'
         ]
         data = self.convert_fields_to_detail_url(
             self.create_obj_variables(), convert_fields
@@ -61,7 +45,6 @@ class PlayerTests(GenericDetailListTests, TestCase):
 
     def test_update_player(self):
         player_obj = PlayerFactory()
-        arm_obj = ArmArmourFactory()
 
         get_resp = self.client.get(
             player_obj.detail_url,
@@ -73,7 +56,6 @@ class PlayerTests(GenericDetailListTests, TestCase):
         last_name = 'Meow'
         get_data['first_name'] = first_name
         get_data['last_name'] = last_name
-        get_data['equipped_left_arm_armour_url'] = arm_obj.detail_url
 
         put_resp = self.client.put(
             player_obj.detail_url,
@@ -86,9 +68,6 @@ class PlayerTests(GenericDetailListTests, TestCase):
         self.assertEqual(put_resp.status_code, 202)
         self.assertEqual(put_data['first_name'], first_name)
         self.assertEqual(put_data['last_name'], last_name)
-        self.assertEqual(
-            put_data['equipped_left_arm_armour_url'], arm_obj.detail_url
-        )
 
     def test_delete_player(self):
         player_obj = PlayerFactory()

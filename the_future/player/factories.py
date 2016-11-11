@@ -2,14 +2,6 @@ import factory
 import random
 
 from account.factories import AccountFactory
-from armour.factories import (
-    ArmArmourFactory,
-    BackPackFactory,
-    BodyArmourFactory,
-    HeadArmourFactory,
-    LegArmourFactory,
-)
-from item.factories import BattleItemFactory, ShieldItemFactory
 from utils.factory_functions import CommonFields
 
 from .models import Faction, Player
@@ -29,24 +21,6 @@ class PlayerFactory(CommonFields):
     first_name = factory.Faker('first_name')
     last_name = factory.Faker('last_name')
     faction = factory.SubFactory(FactionFactory)
-    melee = random.choice(range(10))
-    ballistic = random.choice(range(10))
-    strength = random.choice(range(10))
-    toughness = random.choice(range(10))
-    wounds = random.choice(range(10))
-    initiative = random.choice(range(10))
-    attacks = random.choice(range(10))
-    leadership = random.choice(range(10))
-    health = random.choice(range(10))
-    equipped_head_armour = factory.SubFactory(HeadArmourFactory)
-    equipped_body_armour = factory.SubFactory(BodyArmourFactory)
-    equipped_backpack = factory.SubFactory(BackPackFactory)
-    equipped_left_arm_armour = factory.SubFactory(ArmArmourFactory)
-    equipped_left_leg_armour = factory.SubFactory(LegArmourFactory)
-    equipped_right_arm_armour = factory.SubFactory(ArmArmourFactory)
-    equipped_right_leg_armour = factory.SubFactory(LegArmourFactory)
-    equipped_battle_item = factory.SubFactory(BattleItemFactory)
-    equipped_shield_item = factory.SubFactory(ShieldItemFactory)
 
     class Meta:
         model = Player

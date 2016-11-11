@@ -3,19 +3,44 @@ from restless.preparers import FieldsPreparer
 from utils.generic_resources import (
     COMMON_PREPARE_FIELDS, GenericReadOnlyResource
 )
-from .models import BattleItem, ShieldItem, StandardItem
+from .models import (
+    Armour,
+    Ability,
+    Item,
+    Shield,
+    Weapon,
+)
 
 
-class BattleItemResource(GenericReadOnlyResource):
-    model_cls = BattleItem
-    preparer = FieldsPreparer(fields=COMMON_PREPARE_FIELDS)
+ARMOUR_COMMON_FIELDS = {
+    'name': 'name',
+    'description': 'description',
+    'modifiers': 'modifiers',
+    'monetary_value': 'monetary_value',
+}
+ARMOUR_COMMON_FIELDS.update(COMMON_PREPARE_FIELDS)
 
 
-class ShieldItemResource(GenericReadOnlyResource):
-    model_cls = ShieldItem
-    preparer = FieldsPreparer(fields=COMMON_PREPARE_FIELDS)
+class ArmourResource(GenericReadOnlyResource):
+    model_cls = Armour
+    preparer = FieldsPreparer(fields=ARMOUR_COMMON_FIELDS)
 
 
-class StandardItemResource(GenericReadOnlyResource):
-    model_cls = StandardItem
-    preparer = FieldsPreparer(fields=COMMON_PREPARE_FIELDS)
+class AbilityResource(GenericReadOnlyResource):
+    model_cls = Ability
+    preparer = FieldsPreparer(fields=ARMOUR_COMMON_FIELDS)
+
+
+class ItemResource(GenericReadOnlyResource):
+    model_cls = Item
+    preparer = FieldsPreparer(fields=ARMOUR_COMMON_FIELDS)
+
+
+class ShieldResource(GenericReadOnlyResource):
+    model_cls = Shield
+    preparer = FieldsPreparer(fields=ARMOUR_COMMON_FIELDS)
+
+
+class WeaponResource(GenericReadOnlyResource):
+    model_cls = Weapon
+    preparer = FieldsPreparer(fields=ARMOUR_COMMON_FIELDS)
