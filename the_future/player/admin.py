@@ -11,4 +11,3 @@ class PlayerAdmin(admin.ModelAdmin):
 @admin.register(Faction)
 class FactionAdmin(admin.ModelAdmin):
     pass
-
