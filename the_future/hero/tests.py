@@ -15,10 +15,6 @@ from player.factories import FactionFactory, PlayerFactory
 from utils.generic_tests import GenericDetailListTests
 
 
-from django.test.utils import override_settings
-
-
-@override_settings(DEBUG=True)
 class HeroTests(GenericDetailListTests, TestCase):
     factory_cls = HeroFactory
     url = '/api/hero/'
