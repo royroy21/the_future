@@ -27,4 +27,4 @@ class AccountCreateForm(forms.ModelForm):
 
     class Meta:
         model = Account
-        exclude = ('username', 'password')
+        exclude = ('username', 'password', 'is_active')

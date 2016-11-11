@@ -3,8 +3,8 @@ from restless.preparers import FieldsPreparer
 from utils.generic_resources import (
     COMMON_PREPARE_FIELDS, GenericCrudResource, GenericReadOnlyResource
 )
-from .forms import PlayerForm
-from .models import Faction, Player
+from player.forms import PlayerForm
+from player.models import Faction, Player
 
 
 PLAYER_FIELDS = {

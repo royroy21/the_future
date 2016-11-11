@@ -2,9 +2,8 @@ import factory
 import random
 
 from account.factories import AccountFactory
+from player.models import Faction, Player
 from utils.factory_functions import CommonFields
-
-from .models import Faction, Player
 
 
 class FactionFactory(CommonFields):

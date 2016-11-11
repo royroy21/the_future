@@ -38,4 +38,5 @@ class PlayerForm(ModelForm):
             'modified',
             'created_by',
             'modified_by',
+            'is_active',
         )
