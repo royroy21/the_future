@@ -1,16 +1,13 @@
-from django.conf.urls import patterns, url
+from django.conf.urls import url
 from django.db.models import Q
-from restless.exceptions import BadRequest
 from restless.preparers import FieldsPreparer
 
 from combat_simulator.forms import CombatRequestForm
 from combat_simulator.models import CombatRequest
-from player.models import Player
 from utils.generic_resources import (
     COMMON_PREPARE_FIELDS,
     GenericCrudResource,
 )
-from utils.url_to_object import url_to_object
 
 
 COMBAT_REQUEST_FIELDS = {
@@ -37,8 +34,7 @@ class CombatRequestResource(GenericCrudResource):
 
     def available(self):
         """
-        Returns all combat requests created or awaiting a user's
-        players
+        Returns all combat requests created or awaiting user players
 
         This endpoint accepts a player_id parameter so to only show
         results for one user's player
