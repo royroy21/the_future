@@ -45,6 +45,7 @@ INSTALLED_APPS = [
 
     # new
     'account',
+    'combat_simulator',
     'custom_auth',
     'hero',
     'django_nose',

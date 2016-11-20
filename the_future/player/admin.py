@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Faction, Player
+from player.models import Faction, Player
 
 
 @admin.register(Player)

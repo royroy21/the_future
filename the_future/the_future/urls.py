@@ -19,6 +19,7 @@ from jwt_auth.views import obtain_jwt_token
 
 
 from account.api import AccountResource
+from combat_simulator.api import CombatRequestResource
 from hero.api import HeroResource
 from item.api import (
     ArmourResource,
@@ -62,5 +63,8 @@ urlpatterns += patterns('',
     ),
     url(r'{}'.format(PlayerResource.model_cls.get_url_string()),
         include(PlayerResource.urls()),
+    ),
+    url(r'{}'.format(CombatRequestResource.model_cls.get_url_string()),
+        include(CombatRequestResource.urls()),
     ),
 )

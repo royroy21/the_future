@@ -84,4 +84,5 @@ class HeroForm(ModelForm):
             'modified',
             'created_by',
             'modified_by',
+            'is_active',
         )
