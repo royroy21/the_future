@@ -10,7 +10,6 @@ class JWTBackend(object):
             payload = jwt.decode(token, settings.SECRET_KEY)
         except jwt.exceptions.DecodeError:
             return None
-
         try:
             user = User.objects.get(id=payload['user_id'])
         except User.DoesNotExist:

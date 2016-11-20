@@ -3,6 +3,7 @@ import json
 from django.test import TestCase
 
 from player.factories import FactionFactory, PlayerFactory
+from item.factories import ArmourFactory
 from player.models import Player
 from utils.generic_tests import GenericDetailListTests
 
@@ -83,3 +84,15 @@ class PlayerTests(GenericDetailListTests, TestCase):
         self.assertFalse(
             Player.objects.filter(id=player_obj.id, is_active=True).exists()
         )
+
+    def test_get_jwt(self):
+        player_obj = PlayerFactory(title='test')
+        armour_obj = ArmourFactory()
+
+        bad_resp = self.client.get(armour_obj.detail_url)
+        self.assertEqual(bad_resp.status_code, 401)
+
+        good_resp = self.client.get(
+            armour_obj.detail_url,
+            HTTP_AUTHORIZATION='Bearer {}'.format(player_obj.get_jwt()))
+        self.assertEqual(good_resp.status_code, 200)

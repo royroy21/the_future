@@ -1,4 +1,7 @@
+from django.conf import settings
 from django.db import models
+
+import jwt
 
 from account.models import Account
 from utils.generic_models import CommonFields
@@ -23,3 +26,11 @@ class Player(CommonFields):
         faction_name = self.faction.name if self.faction else None
         return '({}) {} {} {}'.format(
             faction_name, self.title, self.first_name, self.last_name)
+
+    def get_jwt(self):
+        user = self.account.user
+        payload = {'email': user.email, 'user_id': user.pk}
+        return jwt.encode(
+            payload,
+            settings.SECRET_KEY,
+            'HS256').decode('utf-8')

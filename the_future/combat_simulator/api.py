@@ -1,3 +1,5 @@
+from django.conf.urls import patterns, url
+from django.db.models import Q
 from restless.exceptions import BadRequest
 from restless.preparers import FieldsPreparer
 
@@ -11,39 +13,54 @@ from utils.generic_resources import (
 from utils.url_to_object import url_to_object
 
 
+COMBAT_REQUEST_FIELDS = {
+    'points': 'points',
+    'combat_ready': 'combat_ready',
+}
+COMBAT_REQUEST_FIELDS.update(COMMON_PREPARE_FIELDS)
+
+
 class CombatRequestResource(GenericCrudResource):
     model_cls = CombatRequest
     form_cls = CombatRequestForm
 
-    preparer = FieldsPreparer(fields=COMMON_PREPARE_FIELDS)
+    preparer = FieldsPreparer(fields=COMBAT_REQUEST_FIELDS)
 
     def __init__(self, *args, **kwargs):
         super(CombatRequestResource, self).__init__(*args, **kwargs)
 
-        # TODO!
         self.http_methods.update({
-            'schema': {
-                'GET': 'schema',
+            'available': {
+                'GET': 'available',
             }
         })
 
-    def request_combat(self, player_url):
-        player_obj = url_to_object(player_url)
+    def available(self):
+        """
+        Returns all combat requests created or awaiting a user's
+        players
 
-        if not isinstance(Player, player_obj):
-            raise BadRequest('player_url does not resolve to Player')
+        This endpoint accepts a player_id parameter so to only show
+        results for one user's player
+        """
+        user_players = self.request.user.account.player_set.filter(
+            is_active=True)
 
-        return CombatRequest.objects.filter(
-            is_active=True, waiting_for_player=player_obj)
+        player_id = self.request.GET.get('player_id')
+        if player_id:
+            user_players.filter(id=player_id)
+
+        return self.model_cls.objects.filter(
+            Q(waiting_for_player__in=user_players) |
+            Q(initiating_player__in=user_players),
+            is_active=True)
 
     def prepare(self, data):
         extra_fields = super().prepare(data)
 
         for field in [
             'initiating_player',
-            'initiating_hero',
             'waiting_for_player',
-            'waiting_for_hero',
         ]:
             field_obj = getattr(data, field)
             field_name = '{}_url'.format(field)
@@ -52,15 +69,14 @@ class CombatRequestResource(GenericCrudResource):
             else:
                 extra_fields[field_name] = None
 
-        # combat is ready when all heroes and players are ready
-        if all([
-            data.initiating_player,
-            data.initiating_hero,
-            data.waiting_for_player,
-            data.waiting_for_hero,
-        ]):
-            extra_fields['combat_ready'] = True
-        else:
-            extra_fields['combat_ready'] = False
-
         return extra_fields
+
+    @classmethod
+    def urls(cls, name_prefix=None):
+        urlpatterns = super(CombatRequestResource, cls).urls(
+            name_prefix=name_prefix)
+
+        return urlpatterns + [
+            url(r'^available/$', cls.as_list('available'),
+                name=cls.build_url_name('available', name_prefix)),
+        ]

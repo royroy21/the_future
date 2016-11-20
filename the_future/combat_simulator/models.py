@@ -1,6 +1,5 @@
 from django.db import models
 
-from hero.models import Hero
 from player.models import Player
 from utils.generic_models import CommonFields
 
@@ -8,34 +7,33 @@ from utils.generic_models import CommonFields
 class CombatRequest(CommonFields):
     """
     When player requests combat with another player an entry
-    is created here.
+    is created here with a points value for combat.
 
     All player apps will poll a URL telling them if any combat
     requests are meant for them. If a request is available the
-    player will either accept or decline with a hero of equal or
-    less level than the initiating player.
+    player will either accept or decline.
 
-    The initiating player polls this entry to see if the another
+    The initiating player polls this entry to see if the other
     player has accepted.
 
     When both players have accepted a combat simulator URL is sent
     to both players.
     """
     initiating_player = models.ForeignKey(Player)
-    initiating_hero = models.ForeignKey(Hero)
+    points = models.DecimalField(
+        max_digits=999, decimal_places=0, null=True, blank=True)
 
     waiting_for_player = models.ForeignKey(
         Player, blank=True, null=True, related_name='waiting_for_player')
-    waiting_for_hero = models.ForeignKey(
-        Hero, blank=True, null=True, related_name='waiting_for_hero')
+
+    # set to true when waiting for player accepts combat
+    combat_ready = models.BooleanField(default=False)
 
     def __str__(self):
         replace_key = '(NO ONE)'
+        base_str = '{} fights {}'.format(self.initiating_player, replace_key)
 
-        base_str = '{} with {} fights {}'.format(
-            self.initiating_player, self.initiating_hero, replace_key)
         if self.waiting_for_player and self.waiting_for_hero:
-            base_str.replace(replace_key, '{} with {}'.format(
-                self.waiting_for_player, self.waiting_for_hero))
+            base_str.replace(replace_key, self.waiting_for_hero)
 
         return base_str
